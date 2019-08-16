@@ -8,6 +8,8 @@ app.get('/', (req, res) => res.send(Pokemon1))
 
 class Pokemon{
     constructor(name,type){
+        id += 1
+        this.id = id
         this.name = name
         this.type = type
     }
@@ -31,20 +33,29 @@ Pokemon1.push(metapod)
 //     Pokemon.echo()
 // })
 
-let Pokemon2 = [
-    {name:'Pikachu',type:'Electric'},
-    {name:'Paras',type:'Bug'}
-]
+//------------------------- Pokemon2 -----------------------------------//
+var id = 0
+
+// let Pokemon2 = [
+//     {name:'Pikachu',type:'Electric'},
+//     {name:'Paras',type:'Bug'}
+// ]
+
+let Pokemon2 = []
+Pokemon2.push(new Pokemon('Pikachu','Electric'))
+Pokemon2.push(new Pokemon('Paras','Bug'))
 
 app.get('/pokemon', (req, res) => res.send(Pokemon2))
+
 
 // POST /pokemons -> addpokemon to list
 
 //req -> request,res -> response
 app.post('/pokemon', (req, res) => {
-    Pokemon2.push(req.body)
+    let Poke = new Pokemon(req.body.name,req.body.type)
+    Pokemon2.push(Poke)
     console.log(req.body)
-    // res.send('Still work in progreen...')
+    //res.send('Still work in progreen...')
     res.sendStatus(201)
 })
 
