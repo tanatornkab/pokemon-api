@@ -23,6 +23,17 @@ let pokemons= []
 app.get('/pokemon', (req, res) => res.send(pokemons))
 
 app.post('/pokemon', (req, res) => {
+
+    if(req.body.name=== null||
+        req.body.name ===''||
+        req.body.type ===null||
+        req.body.type ===''
+
+        ){
+            res.sendStatus(400)
+
+    }
+
     let tmp = getObject(req.body.name,req.body.type)
     pokemons.push(tmp)
     console.log(tmp)
