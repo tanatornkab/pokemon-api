@@ -4,23 +4,21 @@ const port = 3000
 
 app.use(express.json())
 
-app.get('/', (req, res) => res.send('Hello World'))
+app.get('/', (req, res) => res.send({ message:'Hello'}))
 
 class Pokemon{
-    constructor(name,type){
+    constructor(name,type,type2){
       this.name =name 
       this.type=  type
+      this.type2=  type2
     }
-
-    echo(){
-        console.log(`Type of ${this.name} is ${this.type}`)
-    }
+ 
 }
 
 let pokemons= [
     
     {
-        name: "Pokédex ",
+        name: "Pokédex",
         type: "bug",
         id: 1
     },
@@ -64,13 +62,28 @@ function getpokemonbyID(id){
 app.get('/pokemon', (req, res) => res.send(pokemons))
 
 app.get('/pokemon/:id', (req, res) => {
+    if( !checkError(req.params.id)
+       
+            )
+
+        {
+            res.status(400).send({error : "Insuffucuent paramiters"})
+            return
+    }
    let id = req.params.id
    let p = pokemons[id-1]
+
+   if(p===undefined||p===null){
+    res.status(400).send({error : "The Pokemon could not found"})
+    return
+}
+console.log(p)
    res.send(p)
+   
 })
 
 app.post('/pokemon', (req, res) => {
-    console.log(req.body)
+    
     if( !checkError(req.body.name)||
         !checkError(req.body.type)
             )
@@ -89,7 +102,7 @@ app.post('/pokemon', (req, res) => {
 
 app.put('/pokemon/:id', (req, res) =>{
     
-    if(!checkError(req.body.type2)){
+    if(!checkError(req.params.type2)){
         res.status(400).send({error : "Insuffucuent paramiters:type2 is required parameter"})
         return
     }
@@ -105,9 +118,10 @@ app.put('/pokemon/:id', (req, res) =>{
         return
     }
 
-    p.type2=req.body.type2
+    p.type2=req.params.type2
     pokemons[id-1]=p
-    res.sendStatus(201)
+    console.log(p)
+    res.sendStatus(200)
 })
 
 app.delete('/pokemon/:id',(req,res)=>{
@@ -128,4 +142,4 @@ app.delete('/pokemon/:id',(req,res)=>{
 
 
 })
-app.listen(port, () => console.log(`Pokemon API listening on port ${port}!`))
+module.exports = app
