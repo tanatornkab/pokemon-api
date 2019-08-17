@@ -1,40 +1,44 @@
-/*
-- name : string
-- email : string
-- address : object (houseNo, street, postalCode)
-*/
+const express = require('express')
+const app = express()
+const port = 3000
 
-/* 
-- if lang = 'en', 'Hello'
-- if lang = 'cn', 'Nei Ho'
-*/
+app.use(express.json())
 
-var Un1 = {
-    name: 'ball',
-    email: 'ball@gmail.com',
-    address: {
-        houseNo: '123/11',
-        street: 'Sukumvit',
-        postalCode: '111111'
+app.get('/', (req, res) => res.send('Hello World'))
+
+class Pokemon{
+    constructor(name,type){
+      this.name =name 
+      this.type=  type
     }
-    
-    ,
 
-    hot: 'sss'
-
+    echo(){
+        console.log(`Type of ${this.name} is ${this.type}`)
+    }
 }
 
-function speak(lang){
-    if(lang === undefined || lang === '' || lang.length <2){
-        console.log('Unsupport speak')
-        return
-    }
-    if(lang === 'en'){
-        console.log('Hello')
-    }else if (lang === 'cn'){
-        console.log('Nei Ho')
-    }else{
-        console.log('Sawaddee')
-    }
-    return // function ต้องมี return เสมอ    
+let pokemons= []
+
+
+app.get('/pokemon', (req, res) => res.send(pokemons))
+
+app.post('/pokemon', (req, res) => {
+    let tmp = getObject(req.body.name,req.body.type)
+    pokemons.push(tmp)
+    console.log(tmp)
+    //res.send('Still work in progreen...')
+    res.sendStatus(201)
+})
+function generateID (id){
+    let newID = id+1
+    return newID
 }
+function getObject(name,type){
+    let tmp = new Pokemon(name,type)
+    tmp.id  =  generateID (pokemons.length)
+    return tmp
+}
+
+
+
+app.listen(port, () => console.log(`Pokemon API listening on port ${port}!`))
