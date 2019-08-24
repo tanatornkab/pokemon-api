@@ -39,17 +39,17 @@ describe('Pokemon API',() =>{
          })
     })
 
-    describe('POST /pokemon',()=>{
+    describe('POST /pokemons',()=>{
        
         it('should return 201 Create and have new pokemon',(done) =>{
-            request(app).post('/pokemon')
+            request(app).post('/pokemons')
             .send({ name:"Unknown",type:"Unknown"})
             .set('Accept','application/json')
             .expect(201,done)
         })
 
         it('should return 400 Bad Request when missed required field',(done) =>{
-            request(app).post('/pokemon')
+            request(app).post('/pokemons')
             .expect(400)
             .end((err,res) => {
                 res.body.should.deep.equal({error : "Insuffucuent paramiters: name and type are required parameter"})
@@ -59,7 +59,7 @@ describe('Pokemon API',() =>{
         })
     })
 
-    describe('PUT /pokemon:id',()=>{
+    describe('PUT /pokemon/:id',()=>{
        
         it('should return 201 Create and have new pokemon',(done) =>{
             request(app).post('/pokemon/4')
@@ -77,8 +77,7 @@ describe('Pokemon API',() =>{
         .expect(400)
         .end((err,res) => {
             res.body.should.deep.equal({error : "Insuffucuent paramiters:type2 is required parameter"})
-            // res.body.should.deep.equal({error : "Insuffucuent paramiters:id is required parameter"}),
-            // res.body.should.deep.equal({error : "Cannot update pokemon:Pokemon is not found"})
+   
              
             done()
         })
@@ -90,7 +89,7 @@ describe('Pokemon API',() =>{
 
 describe('Integration Test',()=>{
     it('GET /pokemon should return list of pokemon',(done)=>{
-        request("http://localhost:3000").get('/pokemon')
+        request("http://localhost:3000").get('/pokemons')
         .expect(200)
         .end((err,res) => {
             res.body.should.be.a(array)
