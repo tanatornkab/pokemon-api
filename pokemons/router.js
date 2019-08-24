@@ -5,22 +5,22 @@ var router = express.Router()
 
 router.use(express.json())
 
-router.get('/pokemons', (req, res) => res.send(pokemons.getPokemon))
+router.get('/pokemons', (req, res) => res.send(pokemons.getPokemon()))
 
 
 router.get('/pokemon/:id', (req, res) => {
-    // if( !checkError(req.params.id)){
-    //         res.status(400).send({error : "Insuffucuent paramiters"})
-    //         return
-    // }
+    if( !pokemons.checkError(req.params.id)){
+            res.status(400).send({error : "Insuffucuent paramiters"})
+            return
+    }
 
    let id = req.params.id
-   let p = pokemons.getPokemon(id)
+   let p = pokemons.getPokemonbyID(id)
 
-//    if(p===undefined||p===null){
-//     res.status(400).send({error : "The Pokemon could not found"})
-//     return
-// }
+   if(p===undefined||p===null){
+    res.status(400).send({error : "The Pokemon could not found"})
+    return
+}
 // console.log("test case 1"+p)
    res.send(p)
    
@@ -28,18 +28,18 @@ router.get('/pokemon/:id', (req, res) => {
 
 router.post('/pokemons', (req, res) => {
     
-    if( !checkError(req.body.name)||
-        !checkError(req.body.type)
-            )
+    // if( !checkError(req.body.name)||
+    //     !checkError(req.body.type)
+    //         )
 
-        {
-            res.status(400).send({error : "Insuffucuent paramiters: name and type are required parameter"})
-            return
-    }
+    //     {
+    //         res.status(400).send({error : "Insuffucuent paramiters: name and type are required parameter"})
+    //         return
+    // }
 
-    let tmp = getObject(req.body.name,req.body.type)
-    pokemons.push(tmp)
-    console.log(tmp)
+    
+    pokemons.addData(req.body.name,req.body.type)
+    
     //res.send('Still work in progreen...')
     res.sendStatus(201)
 })
